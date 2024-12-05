@@ -1,5 +1,6 @@
 import psycopg2
 
+from config import config
 from src.api import HHApi
 from src.manager import DBManager
 from src.setup_db import add_company, add_vacancy, create_database, create_tables
@@ -9,11 +10,12 @@ def main():
     create_database()
     create_tables()
 
+    params = config()
     conn = psycopg2.connect(
-        dbname="hh_vacancies",
-        user="postgres",
-        password="simplepassword123",
-        host="localhost",
+        dbname="postgres",
+        user=params["user"],
+        password=params["password"],
+        host=params["host"],
     )
 
     employer_ids = [1455, 1740, 78638]

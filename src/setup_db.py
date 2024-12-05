@@ -1,24 +1,25 @@
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+
 from config import config
 
 
 def create_database():
     params = config()
     conn = psycopg2.connect(
-        dbname='postgres',
-        user=params['user'],
-        password=params['password'],
-        host=params['host']
+        dbname="postgres",
+        user=params["user"],
+        password=params["password"],
+        host=params["host"],
     )
     conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
     cursor = conn.cursor()
 
     try:
-        cursor.execute('CREATE DATABASE your_database_name')
-        print('Database created successfully.')
+        cursor.execute("CREATE DATABASE your_database_name")
+        print("Database created successfully.")
     except psycopg2.errors.DuplicateDatabase:
-        print('Database already exists.')
+        print("Database already exists.")
     finally:
         cursor.close()
         conn.close()
@@ -40,7 +41,7 @@ def create_tables():
             url VARCHAR(255),
             company_id INTEGER REFERENCES companies(id) ON DELETE CASCADE
         );
-        """
+        """,
     ]
 
     conn = None
@@ -52,7 +53,7 @@ def create_tables():
             cursor.execute(command)
         cursor.close()
         conn.commit()
-        print('Tables created successfully.')
+        print("Tables created successfully.")
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     finally:
